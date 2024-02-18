@@ -1,3 +1,4 @@
+from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 import os
@@ -10,7 +11,10 @@ def get_readable_datetime(utc_timestamp):
     """Convert UTC timestamp to a readable datetime string."""
     return datetime.utcfromtimestamp(utc_timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
-def fetch_and_save_saved_posts_comments_fast():
+from pathlib import Path
+
+
+def fetch_saved_items():
     reddit = praw.Reddit(
         client_id=os.getenv("REDDIT_CLIENT_ID"),
         client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
@@ -75,9 +79,9 @@ def fetch_and_save_saved_posts_comments_fast():
         final_output = {}
 
     # Writing to file once at the end
-    with open("../public/saved_items.json", "w") as outfile:
+    with open("saved_items.json", "w") as outfile:
         json.dump(final_output, outfile, indent=4)
 
     print("\nFinished processing items.")
 
-fetch_and_save_saved_posts_comments_fast()
+fetch_saved_items()
