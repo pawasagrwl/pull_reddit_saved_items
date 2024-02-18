@@ -1,4 +1,3 @@
-from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 import os
@@ -10,9 +9,6 @@ load_dotenv()  # Load environment variables from .env file
 def get_readable_datetime(utc_timestamp):
     """Convert UTC timestamp to a readable datetime string."""
     return datetime.utcfromtimestamp(utc_timestamp).strftime('%Y-%m-%d %H:%M:%S')
-
-from pathlib import Path
-
 
 def fetch_saved_items():
     reddit = praw.Reddit(
