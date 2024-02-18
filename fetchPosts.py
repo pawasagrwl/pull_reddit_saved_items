@@ -64,7 +64,7 @@ def fetch_saved_items():
         final_output = {
             "last_pulled": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
             "content": {
-                "subreddits": list(subreddits),
+                "subreddits": sorted(list(subreddits), key=str.lower),
                 "least_votes": min(votes),
                 "most_votes": max(votes),
                 "earliest": get_readable_datetime(min(dates)),
