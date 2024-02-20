@@ -1,6 +1,7 @@
-# Reddit Saved Posts and Comments Fetcher
 
-This Python script fetches your saved posts and comments from Reddit and saves them into a JSON file. It utilizes the PRAW (Python Reddit API Wrapper) library to access Reddit's API securely.
+# Reddit Saved Items Fetcher
+
+This Python script fetches your saved posts and comments from Reddit, with an option to also fetch the top comments for each post on demand. It uses PRAW (Python Reddit API Wrapper) to securely access Reddit's API.
 
 ## Setup
 
@@ -18,8 +19,8 @@ pip install praw python-dotenv
 ```
 
 ### Reddit API Credentials
-    
-1. Visit Reddit's App Preferences to create a new application.
+
+1. Visit [Reddit's App Preferences](https://www.reddit.com/prefs/apps) to create a new application.
 2. Click on "Create App" or "Create Another App".
 3. Fill out the form:
     - name: Your application's name
@@ -28,11 +29,11 @@ pip install praw python-dotenv
     - about url: (Optional)
     - permissions: (Optional)
     - redirect uri: http://localhost:8080 (or any valid URI)
-4. Once created, you'll receive a client_id (below the application name) and a client_secret.
+4. Once created, note your `client_id` (below the application name) and `client_secret`.
 
 ### Environment File
 
-Create a .env file in the root directory of your script with the following content, replacing the placeholders with your actual Reddit API credentials and account details:
+Create a `.env` file in the root directory of your script with your Reddit API credentials and account details:
 
 ```js
 REDDIT_CLIENT_ID=your_client_id
@@ -44,39 +45,102 @@ REDDIT_PASSWORD=your_reddit_password
 ## Usage
 
 Run the script with Python:
+
 ```bash
-python fetch_and_save_saved_posts_comments.py
+python fetchItems.py
 ```
 
-This will fetch all your saved posts and comments from Reddit and save them into saved_items.json in the script's directory.
+The script fetches all your saved posts and comments from Reddit. It will then prompt you about fetching comments for each post, warning about the time it may take based on the number of posts.
+
 
 ## JSON File Format
 
-The JSON file contains a dictionary with two keys: last_pulled, indicating the last time the data was fetched, and content, containing the saved posts and comments. The content key is further divided into posts and comments, each a list of dictionaries containing the respective data.
+The JSON output (`saved_items.json`) has the following format
 
-### Posts
+```json
+{
+  "last_pulled": "UTC timestamp of last fetch",
+  "counts": {
+    "subreddits": {
+      "SubredditName": {
+        "posts": 0,
+        "comments": 0
+      }
+    },
+    "votes": {
+      "0-100": {
+        "posts": 0,
+        "comments": 0
+      },
+      "100-1000": {
+        "posts": 0,
+        "comments": 0
+      },
+      .
+      .
+      .
+      {"100000-1000000": {
+        "posts": 0,
+        "comments": 0
+      },}
 
-Each post is saved with the following information:
+    },
+    "dates": {
+      "YYYY-MM": {
+        "posts": 0,
+        "comments": 0
+      }
+    }
+  },
+  "content": {
+    "posts": [
+      {
+        "title": "Post Title",
+        "url": "https://reddit.com/post_permalink",
+        "subreddit": "SubredditName",
+        "body": "Post Body",
+        "media": "Post Media URL",
+        "datetime": "Post Creation UTC",
+        "votes": "Number of Upvotes",
+        "top_comments": [
+          {
+            "comment_url": "https://reddit.com/comment_permalink",
+            "comment_text": "Comment Body",
+            "datetime": "Comment Creation UTC",
+            "votes": "Number of Upvotes"
+          }
+        ]
+      }
+    ],
+    "comments": [
+      {
+        "post_title": "Post Title",
+        "post_subreddit": "SubredditName",
+        "post_url": "https://reddit.com/post_permalink",
+        "comment_url": "https://reddit.com/comment_permalink",
+        "comment_text": "Comment Body",
+        "datetime": "Comment Creation UTC",
+        "votes": "Number of Upvotes"
+      }
+    ]
+  }
+}
+```
 
-- title: The post title
-- url: The full URL to the post on Reddit
-- subreddit: The subreddit name
-- body: The post's text content, if any
-- media: The URL to the post's media, if any
-- datetime: The post's creation date and time in UTC
-- votes: The number of upvotes
+## Developer Guide
 
-### Comments
+To utilize this data in your code, load the JSON file with Python's `json` module. You can then iterate through `content["posts"]` and `content["comments"]` for posts and comments data, respectively. Use the `counts` and `last_pulled` information for analytics or display purposes.
 
-Each comment is saved with the following information:
+```python
+import json
 
-- post_title: The title of the post the comment is on
-- post_url: The full URL to the post
-- post_media: The URL to the post's media, if any
-- comment_url: The full URL to the comment on Reddit
-- comment_text: The text of the comment
-- datetime: The comment's creation date and time in UTC
-- votes: The number of upvotes
+with open('saved_items.json', 'r') as file:
+    data = json.load(file)
+
+# Example: Print titles of all saved posts
+for post in data["content"]["posts"]:
+    print(post["title"])
+```
 
 ## Note
 
