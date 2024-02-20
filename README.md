@@ -76,9 +76,14 @@ The JSON output (`saved_items.json`) has the following format
         "posts": 0,
         "comments": 0
       },
-      {},
-      {},
-      {},
+      {"1000-10000": {
+        "posts": 0,
+        "comments": 0
+      }},
+      {"10000-100000": {
+        "posts": 0,
+        "comments": 0
+      }},
       {"100000-1000000": {
         "posts": 0,
         "comments": 0
