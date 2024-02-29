@@ -73,6 +73,7 @@ def fetch_saved_items():
                     "media": item.url,
                     "datetime": get_readable_datetime(item.created_utc),
                     "votes": item.score,
+                    "nsfw": item.over_18
                 }
                 
                 saved_items["posts"].append(post_data)
@@ -85,7 +86,8 @@ def fetch_saved_items():
                     "comment_url": f"https://reddit.com{item.permalink}",
                     "comment_text": item.body,
                     "datetime": get_readable_datetime(item.created_utc),
-                    "votes": item.score
+                    "votes": item.score,
+                    "nsfw": item.submission.over_18
                 }
                 
                 saved_items["comments"].append(comment_data)

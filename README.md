@@ -107,6 +107,7 @@ The JSON output (`saved_items.json`) has the following format
         "media": "Post Media URL",
         "datetime": "Post Creation UTC",
         "votes": "Number of Upvotes",
+        "nsfw": true/false
         "top_comments": [
           {
             "comment_url": "https://reddit.com/comment_permalink",
@@ -125,7 +126,8 @@ The JSON output (`saved_items.json`) has the following format
         "comment_url": "https://reddit.com/comment_permalink",
         "comment_text": "Comment Body",
         "datetime": "Comment Creation UTC",
-        "votes": "Number of Upvotes"
+        "votes": "Number of Upvotes",
+        "nsfw": true/false
       }
     ]
   }
